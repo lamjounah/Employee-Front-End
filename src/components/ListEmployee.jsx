@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 
 import React,{useEffect, useState} from 'react';
-import { listEmployee } from '../services/EmployeeService';
+import { deleteEmployee, listEmployee } from '../services/EmployeeService';
 import { useNavigate ,useParams } from 'react-router-dom';
 
 const ListEmployeeComponent = () => {
@@ -9,16 +9,21 @@ const ListEmployeeComponent = () => {
     const [employees,setEmployees] = useState([])
 
 
+
     const navigator = useNavigate();
     const {id} = useParams();
 
     useEffect(() => {
+        getAllEmployee()
+    },[])
+
+    function getAllEmployee(){
         listEmployee().then((Response) => {
             setEmployees(Response.data);
         }).catch(error=>{
             console.error(error);
         })
-    },[])
+    }
 
     function addNewEmployee(){
       navigator('/add-employee')
@@ -36,6 +41,16 @@ const ListEmployeeComponent = () => {
 
         }
     }
+
+    function removeEmpolyee(id){
+        console.log(id);
+         deleteEmployee(id).then((Response)=> {
+            getAllEmployee();
+        }).catch(error => {
+            console.error(error);
+        })
+        
+     }
 
     return (
         <div className="container py-4">
@@ -60,6 +75,8 @@ const ListEmployeeComponent = () => {
                             <td>{employee.email}</td>
                             <td>
                                 <button className='btn btn-info' onClick={()=> updateEmployee(employee.id)}>Update</button>
+                                <button className="btn btn-danger" onClick={()=>removeEmpolyee(employee.id)}>Delete</button>
+
                             </td>
                         </tr>
                     ))}

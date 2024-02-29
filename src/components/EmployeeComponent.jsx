@@ -1,14 +1,15 @@
 /* eslint-disable no-unused-vars */
 import { useEffect, useState } from "react"
 import React from 'react'
-import { createEmployee, getEmployee } from "../services/EmployeeService"
-import { useNavigate } from "react-router-dom"
+import { createEmployee, deleteEmployee, getEmployee, upDateEmpolyee } from "../services/EmployeeService"
+import { useNavigate ,useParams } from "react-router-dom"
 
 
 const EmployeeComponent = () => {
     const [firstName,setFirstName] = useState('')
     const [lastName,setLastName] = useState('')
     const [email,setEmail] = useState('')
+    const { id } = useParams();
 
     const [errors,setErrors] = useState({
         firstName:'',
@@ -17,7 +18,6 @@ const EmployeeComponent = () => {
     })
     
     const navigator =useNavigate();
-            let id = 1;
              useEffect(() => {
                 if(id ){
                     getEmployee(id).then((Response)=>{
@@ -28,21 +28,43 @@ const EmployeeComponent = () => {
                         console.error(error);
                     })
                 }
-             })
+             },[id])
    
-     function saveEmployee(e){
+     function saveOrUpdateEmployee(e){
         
         e.preventDefault(); 
         if(validateForm()){
+
         const  employee = {firstName,lastName,email}
         console.log(employee)
-
-        createEmployee(employee).then((Response)=>{
-            console.log(Response.data);
-            navigator('/employees');
-        })
+        if(id){
+            upDateEmpolyee(id,employee).then((Response) => {
+                console.log(Response.data);
+                navigator('/employees')
+            }).catch(error => {
+                console.error(error);
+            })
+        }else{
+             createEmployee(employee).then((Response)=>{
+             console.log(Response.data);
+             navigator('/employees')
+            }).catch(error =>{
+                console.error(error);
+               })
+            }
        }
      }
+
+     function removeEmpolyee(id){
+        console.log(id);
+        deleteEmployee((id).then((Response)=> {
+
+        }).catch(error => {
+            console.error(error);
+        })
+        )
+     }
+
       function validateForm(){
         let valid =true;
         const errorsCopy = {... errors}
@@ -114,7 +136,8 @@ const EmployeeComponent = () => {
 
 
                             </div>
-                            <button className="btn btn-success" onClick={saveEmployee}>Submit </button>
+                            <button className="btn btn-success" onClick={saveOrUpdateEmployee}>Submit </button>
+                            <button className="bnt btn-danger" onClick={()=>removeEmpolyee}>Delete</button>
 
                         </form>
 
