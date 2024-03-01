@@ -55,15 +55,7 @@ const EmployeeComponent = () => {
        }
      }
 
-     function removeEmpolyee(id){
-        console.log(id);
-        deleteEmployee((id).then((Response)=> {
 
-        }).catch(error => {
-            console.error(error);
-        })
-        )
-     }
 
       function validateForm(){
         let valid =true;
@@ -132,12 +124,11 @@ const EmployeeComponent = () => {
                                  className={`form-control ${errors.email? 'is-invalid':''} `}
                                  onChange={(e)=> setEmail(e.target.value)}
                                  ></input>
-                          {errors.email &&<div className="invalid-feedback">{errors.email}</div>}
+                               {errors.email &&<div className="invalid-feedback">{errors.email}</div>}
 
 
                             </div>
                             <button className="btn btn-success" onClick={saveOrUpdateEmployee}>Submit </button>
-                            <button className="bnt btn-danger" onClick={()=>removeEmpolyee}>Delete</button>
 
                         </form>
 
