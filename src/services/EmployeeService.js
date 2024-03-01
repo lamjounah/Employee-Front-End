@@ -10,7 +10,3 @@ export const upDateEmpolyee= (employeeId, employee) => axios.put(REST_API_BASE_U
 
 export const deleteEmployee = (employeeId) => axios.delete(REST_API_BASE_URL+'/'+ employeeId);
 
-//ff
-//la modification to git hub
-// 3 test
-//modif de hamza
